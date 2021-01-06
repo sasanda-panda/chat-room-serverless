@@ -1,0 +1,11 @@
+{
+    "AppSyncApiName": "chatRoomApi",
+    "DynamoDBBillingMode": "PAY_PER_REQUEST",
+    "DynamoDBEnableServerSideEncryption": false,
+    "AuthCognitoUserPoolId": {
+        "Fn::GetAtt": [
+            "authchatroom102d897e",
+            "Outputs.UserPoolId"
+        ]
+    }
+}
