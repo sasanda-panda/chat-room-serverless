@@ -3,8 +3,8 @@
 // this is an auto generated file. This will be overwritten
 
 export const onCreateRoom = /* GraphQL */ `
-  subscription OnCreateRoom($editors: String!) {
-    onCreateRoom(editors: $editors) {
+  subscription OnCreateRoom($owner: String!, $editors: String!) {
+    onCreateRoom(owner: $owner, editors: $editors) {
       id
       editors
       messages {
@@ -15,17 +15,19 @@ export const onCreateRoom = /* GraphQL */ `
           content
           createdAt
           updatedAt
+          owner
         }
         nextToken
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;
 export const onUpdateRoom = /* GraphQL */ `
-  subscription OnUpdateRoom($editors: String!) {
-    onUpdateRoom(editors: $editors) {
+  subscription OnUpdateRoom($owner: String!, $editors: String!) {
+    onUpdateRoom(owner: $owner, editors: $editors) {
       id
       editors
       messages {
@@ -36,17 +38,19 @@ export const onUpdateRoom = /* GraphQL */ `
           content
           createdAt
           updatedAt
+          owner
         }
         nextToken
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;
 export const onDeleteRoom = /* GraphQL */ `
-  subscription OnDeleteRoom($editors: String!) {
-    onDeleteRoom(editors: $editors) {
+  subscription OnDeleteRoom($owner: String!, $editors: String!) {
+    onDeleteRoom(owner: $owner, editors: $editors) {
       id
       editors
       messages {
@@ -57,17 +61,19 @@ export const onDeleteRoom = /* GraphQL */ `
           content
           createdAt
           updatedAt
+          owner
         }
         nextToken
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;
 export const onCreateMessage = /* GraphQL */ `
-  subscription OnCreateMessage($editors: String!) {
-    onCreateMessage(editors: $editors) {
+  subscription OnCreateMessage($owner: String!, $editors: String!) {
+    onCreateMessage(owner: $owner, editors: $editors) {
       id
       editors
       roomID
@@ -79,16 +85,18 @@ export const onCreateMessage = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       content
       createdAt
       updatedAt
+      owner
     }
   }
 `;
 export const onUpdateMessage = /* GraphQL */ `
-  subscription OnUpdateMessage($editors: String!) {
-    onUpdateMessage(editors: $editors) {
+  subscription OnUpdateMessage($owner: String!, $editors: String!) {
+    onUpdateMessage(owner: $owner, editors: $editors) {
       id
       editors
       roomID
@@ -100,16 +108,18 @@ export const onUpdateMessage = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       content
       createdAt
       updatedAt
+      owner
     }
   }
 `;
 export const onDeleteMessage = /* GraphQL */ `
-  subscription OnDeleteMessage($editors: String!) {
-    onDeleteMessage(editors: $editors) {
+  subscription OnDeleteMessage($owner: String!, $editors: String!) {
+    onDeleteMessage(owner: $owner, editors: $editors) {
       id
       editors
       roomID
@@ -121,10 +131,12 @@ export const onDeleteMessage = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       content
       createdAt
       updatedAt
+      owner
     }
   }
 `;

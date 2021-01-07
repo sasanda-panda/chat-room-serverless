@@ -15,11 +15,13 @@ export const getRoom = /* GraphQL */ `
           content
           createdAt
           updatedAt
+          owner
         }
         nextToken
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -38,6 +40,7 @@ export const listRooms = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       nextToken
     }
@@ -57,10 +60,12 @@ export const getMessage = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       content
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -80,10 +85,12 @@ export const listMessages = /* GraphQL */ `
           editors
           createdAt
           updatedAt
+          owner
         }
         content
         createdAt
         updatedAt
+        owner
       }
       nextToken
     }

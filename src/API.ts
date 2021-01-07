@@ -142,11 +142,13 @@ export type CreateRoomMutation = {
         content: string,
         createdAt: string,
         updatedAt: string,
+        owner: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
+    owner: string | null,
   } | null,
 };
 
@@ -170,11 +172,13 @@ export type UpdateRoomMutation = {
         content: string,
         createdAt: string,
         updatedAt: string,
+        owner: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
+    owner: string | null,
   } | null,
 };
 
@@ -198,11 +202,13 @@ export type DeleteRoomMutation = {
         content: string,
         createdAt: string,
         updatedAt: string,
+        owner: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
+    owner: string | null,
   } | null,
 };
 
@@ -227,10 +233,12 @@ export type CreateMessageMutation = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner: string | null,
     } | null,
     content: string,
     createdAt: string,
     updatedAt: string,
+    owner: string | null,
   } | null,
 };
 
@@ -255,10 +263,12 @@ export type UpdateMessageMutation = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner: string | null,
     } | null,
     content: string,
     createdAt: string,
     updatedAt: string,
+    owner: string | null,
   } | null,
 };
 
@@ -283,10 +293,12 @@ export type DeleteMessageMutation = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner: string | null,
     } | null,
     content: string,
     createdAt: string,
     updatedAt: string,
+    owner: string | null,
   } | null,
 };
 
@@ -309,11 +321,13 @@ export type GetRoomQuery = {
         content: string,
         createdAt: string,
         updatedAt: string,
+        owner: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
+    owner: string | null,
   } | null,
 };
 
@@ -336,6 +350,7 @@ export type ListRoomsQuery = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner: string | null,
     } | null > | null,
     nextToken: string | null,
   } | null,
@@ -361,10 +376,12 @@ export type GetMessageQuery = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner: string | null,
     } | null,
     content: string,
     createdAt: string,
     updatedAt: string,
+    owner: string | null,
   } | null,
 };
 
@@ -388,16 +405,19 @@ export type ListMessagesQuery = {
         editors: Array< string | null >,
         createdAt: string,
         updatedAt: string,
+        owner: string | null,
       } | null,
       content: string,
       createdAt: string,
       updatedAt: string,
+      owner: string | null,
     } | null > | null,
     nextToken: string | null,
   } | null,
 };
 
 export type OnCreateRoomSubscriptionVariables = {
+  owner: string,
   editors: string,
 };
 
@@ -416,15 +436,18 @@ export type OnCreateRoomSubscription = {
         content: string,
         createdAt: string,
         updatedAt: string,
+        owner: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
+    owner: string | null,
   } | null,
 };
 
 export type OnUpdateRoomSubscriptionVariables = {
+  owner: string,
   editors: string,
 };
 
@@ -443,15 +466,18 @@ export type OnUpdateRoomSubscription = {
         content: string,
         createdAt: string,
         updatedAt: string,
+        owner: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
+    owner: string | null,
   } | null,
 };
 
 export type OnDeleteRoomSubscriptionVariables = {
+  owner: string,
   editors: string,
 };
 
@@ -470,15 +496,18 @@ export type OnDeleteRoomSubscription = {
         content: string,
         createdAt: string,
         updatedAt: string,
+        owner: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
+    owner: string | null,
   } | null,
 };
 
 export type OnCreateMessageSubscriptionVariables = {
+  owner: string,
   editors: string,
 };
 
@@ -498,14 +527,17 @@ export type OnCreateMessageSubscription = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner: string | null,
     } | null,
     content: string,
     createdAt: string,
     updatedAt: string,
+    owner: string | null,
   } | null,
 };
 
 export type OnUpdateMessageSubscriptionVariables = {
+  owner: string,
   editors: string,
 };
 
@@ -525,14 +557,17 @@ export type OnUpdateMessageSubscription = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner: string | null,
     } | null,
     content: string,
     createdAt: string,
     updatedAt: string,
+    owner: string | null,
   } | null,
 };
 
 export type OnDeleteMessageSubscriptionVariables = {
+  owner: string,
   editors: string,
 };
 
@@ -552,9 +587,11 @@ export type OnDeleteMessageSubscription = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner: string | null,
     } | null,
     content: string,
     createdAt: string,
     updatedAt: string,
+    owner: string | null,
   } | null,
 };
