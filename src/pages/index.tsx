@@ -1,16 +1,19 @@
-// TODO: ユーザー検索 https://github.com/aws-amplify/amplify-js/issues/1324
+// MEMO: https://github.com/aws-amplify/amplify-js/issues/1324
 // TODO: createRoom
 //       id?: string | null,
 //       editors: Array< string | null >,
 //       roomID: string,
 //       content: string,
+
+// TODO: 検索フォームを作る
+// TODO: メンバーをクリックしたらチャット開始
 import AWS from 'aws-sdk'
 import API, { graphqlOperation } from '@aws-amplify/api'
 import Auth from '@aws-amplify/auth'
 import { useEffect, useState } from 'react'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { } from '../graphql/queries'
+import { listRooms } from '../graphql/queries'
 import { createRoom, deleteRoom, createMessage, deleteMessage } from '../graphql/mutations'
 import { onCreateRoom, onDeleteRoom, onCreateMessage, onDeleteMessage } from '../graphql/subscriptions'
 import styles from '../styles/Home.module.scss'
@@ -39,16 +42,44 @@ type AuthenticatedUserType = {
   sub: string
 }
 
+type RoomType = {
+  id: string,
+  editors: string[],
+  messages: MessageType[]
+}
+
+type MessageType = {
+  id: string,
+  editors: string[],
+  roomID: string,
+  room: RoomType,
+  content: string,
+}
+
 const Home: NextPage = () => {
 
   const [allUsers, setAllUsers] = useState<UserType[]|null>(null)
   const [authenticatedUser, setAuthenticatedUser] = useState<AuthenticatedUserType|null>(null)
+  const [searchText, setSearchText] = useState<string>('')
+  const [currentRoom, setCurrentRoom] = useState<RoomType|null>(null)
 
   // 
 
   const router = useRouter()
 
   // 
+
+  const filterdAllUsers = allUsers?.filter((user) => {
+    if (searchText !== '') {
+      if (user.username.indexOf(searchText) === 0 || user.email.indexOf(searchText) === 0) {
+        return true
+      } else {
+        return false
+      }
+    } else {
+      return false
+    }
+  })
 
   const fetchUser = async () => {
     try {
@@ -87,9 +118,19 @@ const Home: NextPage = () => {
     }
   }
 
+  const fetchData = async () => {
+    try {
+      const d = await API.graphql(graphqlOperation(listRooms))
+      console.log(d)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   useEffect(() => {
     fetchUser()
     fetchAllUser()
+    fetchData()
   }, [])
 
   // 
@@ -113,8 +154,18 @@ const Home: NextPage = () => {
     <div className={styles.home}>
       <div className={styles.home_head}>
         {/* MEMO: ユーザー検索欄 */}
-        <div>
-          <button onClick={() => createRoomAsync()}>createRoomAsync</button>
+        <div className={styles.search}>
+          <input className={styles.search_text} type="text" value={searchText} onChange={(eve) => setSearchText(eve.target.value)}/>
+          {searchText !== '' && (
+            <ul className={styles.search_result}>
+              {filterdAllUsers?.map((user) => (
+                <li key={user.username} className={styles.search_result_item}>
+                  <p>{user.username}</p>
+                </li>
+              ))}
+            </ul>
+          )}
+          {/* <button onClick={() => createRoomAsync()}>createRoomAsync</button> */}
         </div>
         {/* MEMO: 連絡したユーザーリスト */}
         <ul>

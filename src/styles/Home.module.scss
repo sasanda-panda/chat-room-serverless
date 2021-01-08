@@ -1,0 +1,43 @@
+.home {
+  width: 100%;
+  display: flex;
+  &_head {
+    width: 480px;
+    background-color: #000;
+  }
+  &_body {
+    width: calc(100% - 480px);
+    background-color: #ddd;
+  }
+}
+
+.search {
+  padding: 24px;
+  width: 100%;
+  background-color: #ccc;
+  position: relative;
+  &_text {
+    padding: 8px;
+    width: 100%;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    letter-spacing: 0.05em;
+  }
+  &_result {
+    box-sizing: border-box;
+    width: 80%;
+    background-color: #ddd;
+    border-right: 1px solid #000;
+    border-bottom: 1px solid #000;
+    border-left: 1px solid #000;
+    border-radius: 0 0 4px 4px;
+    position: absolute;
+    &_item {
+      padding: 8px;
+      & + & {
+        border-top: 1px solid #000;
+      }
+    }
+  }
+}
