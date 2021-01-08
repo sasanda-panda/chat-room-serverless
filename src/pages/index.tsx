@@ -60,7 +60,7 @@ const Home: NextPage = () => {
 
   const [allUsers, setAllUsers] = useState<UserType[]|null>(null)
   const [authenticatedUser, setAuthenticatedUser] = useState<AuthenticatedUserType|null>(null)
-  const [searchText, setSearchText] = useState<string>('')
+  const [searchUserText, setSearchUserText] = useState<string>('')
   const [currentRoom, setCurrentRoom] = useState<RoomType|null>(null)
 
   // 
@@ -70,9 +70,9 @@ const Home: NextPage = () => {
   // 
 
   const filterdAllUsers = allUsers?.filter((user) => {
-    if (searchText !== '') {
-      if (user.username.indexOf(searchText) === 0 || user.email.indexOf(searchText) === 0) {
-        return true
+    if (searchUserText !== '') {
+      if (authenticatedUser.sub !== user.sub && (user.username.indexOf(searchUserText) === 0 || user.email.indexOf(searchUserText) === 0)) {
+      return true
       } else {
         return false
       }
@@ -135,14 +135,30 @@ const Home: NextPage = () => {
 
   // 
 
-  const createRoomAsync = async () => {
+  const createRoomAsync = async (friendUser: UserType) => {
     try {
       const withData = { input: {
         id: Date.now(),
-        editors: [authenticatedUser.sub, 'b3ed2023-aa61-42ce-baf0-a3d5b152f953']
+        editors: [authenticatedUser.sub, friendUser.sub]
       } }
-      const a = await API.graphql(graphqlOperation(createRoom, withData))
-      console.log(a)
+      const data: any = await API.graphql(graphqlOperation(createRoom, withData))
+      setCurrentRoom(data.data.createRoom)
+      setSearchUserText('')
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const createMessageAsync = async (room: RoomType, content: string) => {
+    try {
+      const withData = { input: {
+        id: Date.now(),
+        editors: room.editors,
+        roomID: room.id,
+        content: content
+      } }
+      const data: any = await API.graphql(graphqlOperation(createMessage, withData))
+      console.log(data)
     } catch (err) {
       console.log(err)
     }
@@ -153,19 +169,15 @@ const Home: NextPage = () => {
   return authenticatedUser ? (
     <div className={styles.home}>
       <div className={styles.home_head}>
-        {/* MEMO: ユーザー検索欄 */}
         <div className={styles.search}>
-          <input className={styles.search_text} type="text" value={searchText} onChange={(eve) => setSearchText(eve.target.value)}/>
-          {searchText !== '' && (
-            <ul className={styles.search_result}>
+          <input className={styles.search_text} type="text" value={searchUserText} onChange={(eve) => setSearchUserText(eve.target.value)} />
+          {searchUserText !== '' && (
+            <ul className={styles.search_results}>
               {filterdAllUsers?.map((user) => (
-                <li key={user.username} className={styles.search_result_item}>
-                  <p>{user.username}</p>
-                </li>
+                <li key={user.username} className={styles.search_results_item} onClick={() => createRoomAsync(user)}>{user.username}</li>
               ))}
             </ul>
           )}
-          {/* <button onClick={() => createRoomAsync()}>createRoomAsync</button> */}
         </div>
         {/* MEMO: 連絡したユーザーリスト */}
         <ul>
@@ -174,7 +186,19 @@ const Home: NextPage = () => {
       </div>
       <div className={styles.home_body}>
         {/* MEMO: チャット欄 */}
-        <div></div>
+        <div className={styles.chat}>
+          {currentRoom ? (
+            <>
+              {/* <textarea className={styles.chat_text}>aaaaa</textarea> */}
+              <div onClick={() => createMessageAsync(currentRoom, 'abc')}>aaa</div>
+              <ul className={styles.chat_messages}>
+                <li className={styles.chat_messages_item}></li>
+              </ul>
+            </>
+          ) : (
+            <div>ないよ</div>
+          )}
+        </div>
       </div>
     </div>
   ) : (
