@@ -207,35 +207,37 @@ const Home: NextPage = () => {
   return authenticatedUser ? (
     <div className={styles.home}>
       <div className={styles.home_head}>
-        <div className={styles.search}>
-          <input className={styles.search_text} type="text" placeholder="Enter your friend's name or email" value={searchUserTerm} onChange={(eve) => onChangeSearchText(eve.target.value)} />
-          {searchUserTerm !== '' && (
-            <ul className={styles.search_results}>
-              {filterdAllUsers?.map((user) => (
-                <li key={user.username} className={styles.search_results_item} onClick={() => createRoomAsync(user)}>
-                  {user.username}<span>{user.email}</span>
-                </li>
-              ))}
-            </ul>
-          )}
+        <div className={styles.home_head_scroll}>
+          <div className={styles.search}>
+            <input className={styles.search_text} type="text" placeholder="Enter your friend's name or email" value={searchUserTerm} onChange={(eve) => onChangeSearchText(eve.target.value)} />
+            {searchUserTerm !== '' && (
+              <ul className={styles.search_results}>
+                {filterdAllUsers?.map((user) => (
+                  <li key={user.username} className={styles.search_results_item} onClick={() => createRoomAsync(user)}>
+                    {user.username}<span>{user.email}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+          {/* MEMO: 連絡したユーザーリスト */}
+          <ul className={styles.friends}>
+            {rooms?.map((room) => (
+              <li key={room.id} className={styles.friends_item} onClick={() => onClickFriendsItem(room)}>
+                {allUsers?.filter((user) => user.sub === room.editors.filter((editor) => editor !== authenticatedUser.sub)[0])[0].username}
+              </li>
+            ))}
+          </ul>
         </div>
-        {/* MEMO: 連絡したユーザーリスト */}
-        <ul className={styles.friends}>
-          {rooms?.map((room) => (
-            <li key={room.id} className={styles.friends_item} onClick={() => onClickFriendsItem(room)}>
-              {allUsers?.filter((user) => user.sub === room.editors.filter((editor) => editor !== authenticatedUser.sub)[0])[0].username}
-            </li>
-          ))}
-        </ul>
       </div>
       <div className={styles.home_body}>
-        {/* MEMO: チャット欄 */}
+        <div className={styles.home_body_scroll}>
           {currentRoom ? (
             <>
               <ul className={styles.messages}>
                 {currentRoom.messages?.items?.map((message) => (
                   <li key={message.id} className={`${styles.messages_item} ${checkMessageIsOwener(message) ? styles.messages_item_right : styles.messages_item_left }`}>
-                    <p className={styles.messages_item_content}>{message.content}</p>
+                    <p className={styles.messages_item_content}>{message.content.split('\n').map((s) => (<>{s}<br /></>))}</p>
                   </li>
                 ))}
               </ul>
@@ -250,7 +252,7 @@ const Home: NextPage = () => {
                 <ul className={styles.messages}>
                   {rooms[0].messages?.items?.map((message) => (
                     <li key={message.id} className={`${styles.messages_item} ${checkMessageIsOwener(message) ? styles.messages_item_right : styles.messages_item_left }`}>
-                      <p className={styles.messages_item_content}>{message.content}</p>
+                      <p className={styles.messages_item_content}>{message.content.split('\n').map((s) => (<>{s}<br /></>))}</p>
                     </li>
                   ))}
                 </ul>
@@ -263,6 +265,7 @@ const Home: NextPage = () => {
               <div>チャットを始めよう</div>
             )
           )}
+        </div>
       </div>
     </div>
   ) : (

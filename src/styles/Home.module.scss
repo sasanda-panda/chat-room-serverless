@@ -7,23 +7,34 @@
   display: flex;
   overflow: hidden;
   &_head {
-    padding: 24px;
     width: 480px;
-    // background-color: $COLOR_DARK_BLUE;
     border-right: 2px solid $COLOR_DARK_BLUE;
     position: relative;
+    overflow: hidden;
+    &_scroll {
+      padding: 24px;
+      width: calc(480px + 16px);
+      height: 100%;
+      overflow-y: scroll;
+    }
   }
   &_body {
-    padding: 24px;
     width: calc(100% - 480px);
     background-color: $COLOR_WHITE;
     position: relative;
+    overflow: hidden;
+    &_scroll {
+      padding: 24px;
+      width: calc(100% + 16px);
+      height: 100%;
+      overflow-y: scroll;
+    }
   }
 }
 
 .search {
-  width: 100%;
   position: relative;
+  z-index: 2;
   &_text {
     padding: 8px 0;
     width: 100%;
@@ -59,6 +70,8 @@
 }
 
 .friends {
+  position: relative;
+  z-index: 1;
   &_item {
     padding: 24px 0;
     color: $COLOR_DARK_BLUE;
@@ -76,6 +89,7 @@
 }
 
 .messages {
+  padding: 0 0 104px;
   position: relative;
   z-index: 1;
   &_item {
@@ -95,30 +109,33 @@
       background-image: $GRADIENT_BLUE;
       border-radius: 24px;
       line-height: 1.6;
+      text-align: left;
     }
   }
 }
 
 .chat {
-  width: 100%;
+  width: calc(100% - 480px);
   display: flex;
   justify-content: space-between;
   background-color: $COLOR_DARK_BLUE;
   border-top: 2px solid $COLOR_DARK_BLUE;
-  position: absolute;
+  position: fixed;
   bottom: 0;
-  left: 0;
+  right: 0;
   z-index: 2;
   &_text {
     padding: 24px;
-    width: calc(100% - 120px);
+    width: calc(100% - 96px);
+    height: 96px;
     background-color: $COLOR_WHITE;
     &::placeholder {
       color: rgba($COLOR_DARK_BLUE, 0.25);
     }
   }
   &_button {
-    width: 120px;
+    width: 96px;
+    height: 96px;
     color: $COLOR_WHITE;
     background-image: $GRADIENT_BLUE;
   }
