@@ -161,22 +161,16 @@ const Home: NextPage = () => {
       createMessageClient.subscribe({
         next: (result: any) => {
           if (result.value.data.onCreateMessage.editors.indexOf(user.attributes.sub) >= 0) {
-            setRooms((oldRooms) => [...oldRooms].map((room) => {
-              if (room.id === result.value.data.onCreateMessage.roomID) {
-                return {
-                  ...room,
-                  messages: {
-                    ...room.messages,
-                    items: [
-                      ...room.messages.items,
-                      result.value.data.onCreateMessage
-                    ]
-                  }
-                }
-              } else {
-                return room
-              }
-            }))
+            const updateArray = (oldRooms: RoomType[]) => {
+              let newIndex = 0
+              let newRooms = [...oldRooms]
+              newRooms.forEach((room, index) => {
+                if (room.id === result.value.data.onCreateMessage.roomID) newIndex = index
+              })
+              newRooms[newIndex].messages.items.push(result.value.data.onCreateMessage)
+              return newRooms
+            }
+            setRooms((oldRooms) => updateArray(oldRooms))
           }
         }
       });
