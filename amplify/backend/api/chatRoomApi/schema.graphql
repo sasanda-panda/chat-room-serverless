@@ -1,4 +1,4 @@
-type Room @model 
+type Room @model
   @auth(rules: [{allow: owner, identityClaim: "sub"}, {allow: owner, ownerField: "editors", operations: [read, create, update, delete]}])
 {
   id: ID!

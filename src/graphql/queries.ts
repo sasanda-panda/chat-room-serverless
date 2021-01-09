@@ -36,6 +36,25 @@ export const listRooms = /* GraphQL */ `
         id
         editors
         messages {
+          items {
+            id
+            editors
+            roomID
+            room {
+              id
+              editors
+              messages {
+                nextToken
+              }
+              createdAt
+              updatedAt
+              owner
+            }
+            content
+            createdAt
+            updatedAt
+            owner
+          }
           nextToken
         }
         createdAt

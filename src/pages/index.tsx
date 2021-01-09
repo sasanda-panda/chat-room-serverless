@@ -1,12 +1,9 @@
 // MEMO: https://github.com/aws-amplify/amplify-js/issues/1324
-// TODO: createRoom
-//       id?: string | null,
-//       editors: Array< string | null >,
-//       roomID: string,
-//       content: string,
 
-// TODO: 検索フォームを作る
-// TODO: メンバーをクリックしたらチャット開始
+// TODO: スタイル調整
+// TODO: list
+// TODO: subscription
+
 import AWS from 'aws-sdk'
 import API, { graphqlOperation } from '@aws-amplify/api'
 import Auth from '@aws-amplify/auth'
@@ -17,6 +14,7 @@ import { listRooms } from '../graphql/queries'
 import { createRoom, deleteRoom, createMessage, deleteMessage } from '../graphql/mutations'
 import { onCreateRoom, onDeleteRoom, onCreateMessage, onDeleteMessage } from '../graphql/subscriptions'
 import styles from '../styles/Home.module.scss'
+import { create } from 'domain'
 
 const awsconfig = {
   apiVersion: '2016-04-18',
@@ -44,12 +42,14 @@ type AuthenticatedUserType = {
 
 type RoomType = {
   id: string,
+  owner: string,
   editors: string[],
-  messages: MessageType[]
+  messages: { items: MessageType[] }
 }
 
 type MessageType = {
   id: string,
+  owner: string,
   editors: string[],
   roomID: string,
   room: RoomType,
@@ -58,10 +58,12 @@ type MessageType = {
 
 const Home: NextPage = () => {
 
-  const [allUsers, setAllUsers] = useState<UserType[]|null>(null)
   const [authenticatedUser, setAuthenticatedUser] = useState<AuthenticatedUserType|null>(null)
-  const [searchUserText, setSearchUserText] = useState<string>('')
+  const [allUsers, setAllUsers] = useState<UserType[]|null>(null)
+  const [searchUserTerm, setSearchUserTerm] = useState<string>('')
+  const [rooms, setRooms] = useState<RoomType[]|null>(null)
   const [currentRoom, setCurrentRoom] = useState<RoomType|null>(null)
+  const [sendMessageContent, setSendMessageContent] = useState<string>('')
 
   // 
 
@@ -70,8 +72,8 @@ const Home: NextPage = () => {
   // 
 
   const filterdAllUsers = allUsers?.filter((user) => {
-    if (searchUserText !== '') {
-      if (authenticatedUser.sub !== user.sub && (user.username.indexOf(searchUserText) === 0 || user.email.indexOf(searchUserText) === 0)) {
+    if (searchUserTerm !== '') {
+      if (authenticatedUser.sub !== user.sub && (user.username.indexOf(searchUserTerm) === 0 || user.email.indexOf(searchUserTerm) === 0)) {
       return true
       } else {
         return false
@@ -120,20 +122,44 @@ const Home: NextPage = () => {
 
   const fetchData = async () => {
     try {
-      const d = await API.graphql(graphqlOperation(listRooms))
-      console.log(d)
+      const data: any = await API.graphql(graphqlOperation(listRooms))
+      setRooms(data.data.listRooms.items)
     } catch (err) {
       console.log(err)
     }
+  }
+
+  const attachSubscriptions = async () => {
+    // const createRoomClient = API.graphql(graphqlOperation(onCreateRoom))
+    // if ("subscribe" in createRoomClient) {
+    //   createRoomClient.subscribe({
+    //     next: (result: any) => {
+    //       alert('onCreateRoom')
+    //     }
+    //   })
+    // }
+    // const createMessageClient = API.graphql(graphqlOperation(onCreateMessage))
+    // if ("subscribe" in createMessageClient) {
+    //   createMessageClient.subscribe({
+    //     next: (result: any) => {
+    //       alert('onCreatMessage')
+    //     }
+    //   })
+    // }
   }
 
   useEffect(() => {
     fetchUser()
     fetchAllUser()
     fetchData()
+    attachSubscriptions()
   }, [])
 
   // 
+
+  const checkMessageIsOwener = (message: MessageType) => {
+    return message.owner === authenticatedUser.sub
+  }
 
   const createRoomAsync = async (friendUser: UserType) => {
     try {
@@ -143,25 +169,37 @@ const Home: NextPage = () => {
       } }
       const data: any = await API.graphql(graphqlOperation(createRoom, withData))
       setCurrentRoom(data.data.createRoom)
-      setSearchUserText('')
+      setSearchUserTerm('')
     } catch (err) {
       console.log(err)
     }
   }
 
-  const createMessageAsync = async (room: RoomType, content: string) => {
+  const createMessageAsync = async (room: RoomType) => {
     try {
       const withData = { input: {
         id: Date.now(),
         editors: room.editors,
         roomID: room.id,
-        content: content
+        content: sendMessageContent
       } }
       const data: any = await API.graphql(graphqlOperation(createMessage, withData))
-      console.log(data)
     } catch (err) {
       console.log(err)
     }
+  }
+
+  const onChangeSearchText = (value: string) => {
+    setSearchUserTerm(value)
+  }
+
+  const onClickResultsItem = async () => {
+    // 履歴があればsetCurrentRoom
+    // なければ作成
+  }
+
+  const onClickFriendsItem = (room: RoomType) => {
+    setCurrentRoom(room)
   }
 
   // 
@@ -170,35 +208,61 @@ const Home: NextPage = () => {
     <div className={styles.home}>
       <div className={styles.home_head}>
         <div className={styles.search}>
-          <input className={styles.search_text} type="text" value={searchUserText} onChange={(eve) => setSearchUserText(eve.target.value)} />
-          {searchUserText !== '' && (
+          <input className={styles.search_text} type="text" placeholder="Enter your friend's name or email" value={searchUserTerm} onChange={(eve) => onChangeSearchText(eve.target.value)} />
+          {searchUserTerm !== '' && (
             <ul className={styles.search_results}>
               {filterdAllUsers?.map((user) => (
-                <li key={user.username} className={styles.search_results_item} onClick={() => createRoomAsync(user)}>{user.username}</li>
+                <li key={user.username} className={styles.search_results_item} onClick={() => createRoomAsync(user)}>
+                  {user.username}<span>{user.email}</span>
+                </li>
               ))}
             </ul>
           )}
         </div>
         {/* MEMO: 連絡したユーザーリスト */}
-        <ul>
-          <li></li>
+        <ul className={styles.friends}>
+          {rooms?.map((room) => (
+            <li key={room.id} className={styles.friends_item} onClick={() => onClickFriendsItem(room)}>
+              {allUsers?.filter((user) => user.sub === room.editors.filter((editor) => editor !== authenticatedUser.sub)[0])[0].username}
+            </li>
+          ))}
         </ul>
       </div>
       <div className={styles.home_body}>
         {/* MEMO: チャット欄 */}
-        <div className={styles.chat}>
           {currentRoom ? (
             <>
-              {/* <textarea className={styles.chat_text}>aaaaa</textarea> */}
-              <div onClick={() => createMessageAsync(currentRoom, 'abc')}>aaa</div>
-              <ul className={styles.chat_messages}>
-                <li className={styles.chat_messages_item}></li>
+              <ul className={styles.messages}>
+                {currentRoom.messages?.items?.map((message) => (
+                  <li key={message.id} className={`${styles.messages_item} ${checkMessageIsOwener(message) ? styles.messages_item_right : styles.messages_item_left }`}>
+                    <p className={styles.messages_item_content}>{message.content}</p>
+                  </li>
+                ))}
               </ul>
+              <div className={styles.chat}>
+                <textarea className={styles.chat_text} placeholder="Enter your message" value={sendMessageContent} onChange={(eve) => setSendMessageContent(eve.target.value)}></textarea>
+                <button className={styles.chat_button} onClick={() => createMessageAsync(currentRoom)}></button>
+              </div>
             </>
           ) : (
-            <div>ないよ</div>
+            (rooms && rooms[0]) ? (
+              <>
+                <ul className={styles.messages}>
+                  {rooms[0].messages?.items?.map((message) => (
+                    <li key={message.id} className={`${styles.messages_item} ${checkMessageIsOwener(message) ? styles.messages_item_right : styles.messages_item_left }`}>
+                      <p className={styles.messages_item_content}>{message.content}</p>
+                    </li>
+                  ))}
+                </ul>
+                <div className={styles.chat}>
+                  <textarea className={styles.chat_text} placeholder="Enter your message" value={sendMessageContent} onChange={(eve) => setSendMessageContent(eve.target.value)}></textarea>
+                  <button className={styles.chat_button} onClick={() => createMessageAsync(rooms[0])}></button>
+                </div>
+              </>
+            ) : (
+              <div>チャットを始めよう</div>
+            )
           )}
-        </div>
       </div>
     </div>
   ) : (
