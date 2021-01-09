@@ -4,40 +4,19 @@
 
 export type CreateRoomInput = {
   id?: string | null,
+  owner?: string | null,
   editors: Array< string | null >,
 };
 
 export type ModelRoomConditionInput = {
+  owner?: ModelStringInput | null,
+  editors?: ModelStringInput | null,
   and?: Array< ModelRoomConditionInput | null > | null,
   or?: Array< ModelRoomConditionInput | null > | null,
   not?: ModelRoomConditionInput | null,
 };
 
-export type UpdateRoomInput = {
-  id: string,
-  editors?: Array< string | null > | null,
-};
-
-export type DeleteRoomInput = {
-  id?: string | null,
-};
-
-export type CreateMessageInput = {
-  id?: string | null,
-  editors: Array< string | null >,
-  roomID: string,
-  content: string,
-};
-
-export type ModelMessageConditionInput = {
-  roomID?: ModelIDInput | null,
-  content?: ModelStringInput | null,
-  and?: Array< ModelMessageConditionInput | null > | null,
-  or?: Array< ModelMessageConditionInput | null > | null,
-  not?: ModelMessageConditionInput | null,
-};
-
-export type ModelIDInput = {
+export type ModelStringInput = {
   ne?: string | null,
   eq?: string | null,
   le?: string | null,
@@ -77,7 +56,35 @@ export type ModelSizeInput = {
   between?: Array< number | null > | null,
 };
 
-export type ModelStringInput = {
+export type UpdateRoomInput = {
+  id: string,
+  owner?: string | null,
+  editors?: Array< string | null > | null,
+};
+
+export type DeleteRoomInput = {
+  id?: string | null,
+};
+
+export type CreateMessageInput = {
+  id?: string | null,
+  owner?: string | null,
+  editors: Array< string | null >,
+  roomID: string,
+  content: string,
+};
+
+export type ModelMessageConditionInput = {
+  owner?: ModelStringInput | null,
+  editors?: ModelStringInput | null,
+  roomID?: ModelIDInput | null,
+  content?: ModelStringInput | null,
+  and?: Array< ModelMessageConditionInput | null > | null,
+  or?: Array< ModelMessageConditionInput | null > | null,
+  not?: ModelMessageConditionInput | null,
+};
+
+export type ModelIDInput = {
   ne?: string | null,
   eq?: string | null,
   le?: string | null,
@@ -95,6 +102,7 @@ export type ModelStringInput = {
 
 export type UpdateMessageInput = {
   id: string,
+  owner?: string | null,
   editors?: Array< string | null > | null,
   roomID?: string | null,
   content?: string | null,
@@ -106,6 +114,7 @@ export type DeleteMessageInput = {
 
 export type ModelRoomFilterInput = {
   id?: ModelIDInput | null,
+  owner?: ModelStringInput | null,
   editors?: ModelStringInput | null,
   and?: Array< ModelRoomFilterInput | null > | null,
   or?: Array< ModelRoomFilterInput | null > | null,
@@ -114,6 +123,7 @@ export type ModelRoomFilterInput = {
 
 export type ModelMessageFilterInput = {
   id?: ModelIDInput | null,
+  owner?: ModelStringInput | null,
   editors?: ModelStringInput | null,
   roomID?: ModelIDInput | null,
   content?: ModelStringInput | null,
@@ -131,24 +141,24 @@ export type CreateRoomMutation = {
   createRoom:  {
     __typename: "Room",
     id: string,
+    owner: string | null,
     editors: Array< string | null >,
     messages:  {
       __typename: "ModelMessageConnection",
       items:  Array< {
         __typename: "Message",
         id: string,
+        owner: string | null,
         editors: Array< string | null >,
         roomID: string,
         content: string,
         createdAt: string,
         updatedAt: string,
-        owner: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
-    owner: string | null,
   } | null,
 };
 
@@ -161,24 +171,24 @@ export type UpdateRoomMutation = {
   updateRoom:  {
     __typename: "Room",
     id: string,
+    owner: string | null,
     editors: Array< string | null >,
     messages:  {
       __typename: "ModelMessageConnection",
       items:  Array< {
         __typename: "Message",
         id: string,
+        owner: string | null,
         editors: Array< string | null >,
         roomID: string,
         content: string,
         createdAt: string,
         updatedAt: string,
-        owner: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
-    owner: string | null,
   } | null,
 };
 
@@ -191,24 +201,24 @@ export type DeleteRoomMutation = {
   deleteRoom:  {
     __typename: "Room",
     id: string,
+    owner: string | null,
     editors: Array< string | null >,
     messages:  {
       __typename: "ModelMessageConnection",
       items:  Array< {
         __typename: "Message",
         id: string,
+        owner: string | null,
         editors: Array< string | null >,
         roomID: string,
         content: string,
         createdAt: string,
         updatedAt: string,
-        owner: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
-    owner: string | null,
   } | null,
 };
 
@@ -221,11 +231,13 @@ export type CreateMessageMutation = {
   createMessage:  {
     __typename: "Message",
     id: string,
+    owner: string | null,
     editors: Array< string | null >,
     roomID: string,
     room:  {
       __typename: "Room",
       id: string,
+      owner: string | null,
       editors: Array< string | null >,
       messages:  {
         __typename: "ModelMessageConnection",
@@ -233,12 +245,10 @@ export type CreateMessageMutation = {
       } | null,
       createdAt: string,
       updatedAt: string,
-      owner: string | null,
     } | null,
     content: string,
     createdAt: string,
     updatedAt: string,
-    owner: string | null,
   } | null,
 };
 
@@ -251,11 +261,13 @@ export type UpdateMessageMutation = {
   updateMessage:  {
     __typename: "Message",
     id: string,
+    owner: string | null,
     editors: Array< string | null >,
     roomID: string,
     room:  {
       __typename: "Room",
       id: string,
+      owner: string | null,
       editors: Array< string | null >,
       messages:  {
         __typename: "ModelMessageConnection",
@@ -263,12 +275,10 @@ export type UpdateMessageMutation = {
       } | null,
       createdAt: string,
       updatedAt: string,
-      owner: string | null,
     } | null,
     content: string,
     createdAt: string,
     updatedAt: string,
-    owner: string | null,
   } | null,
 };
 
@@ -281,11 +291,13 @@ export type DeleteMessageMutation = {
   deleteMessage:  {
     __typename: "Message",
     id: string,
+    owner: string | null,
     editors: Array< string | null >,
     roomID: string,
     room:  {
       __typename: "Room",
       id: string,
+      owner: string | null,
       editors: Array< string | null >,
       messages:  {
         __typename: "ModelMessageConnection",
@@ -293,12 +305,10 @@ export type DeleteMessageMutation = {
       } | null,
       createdAt: string,
       updatedAt: string,
-      owner: string | null,
     } | null,
     content: string,
     createdAt: string,
     updatedAt: string,
-    owner: string | null,
   } | null,
 };
 
@@ -310,24 +320,24 @@ export type GetRoomQuery = {
   getRoom:  {
     __typename: "Room",
     id: string,
+    owner: string | null,
     editors: Array< string | null >,
     messages:  {
       __typename: "ModelMessageConnection",
       items:  Array< {
         __typename: "Message",
         id: string,
+        owner: string | null,
         editors: Array< string | null >,
         roomID: string,
         content: string,
         createdAt: string,
         updatedAt: string,
-        owner: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
-    owner: string | null,
   } | null,
 };
 
@@ -343,6 +353,7 @@ export type ListRoomsQuery = {
     items:  Array< {
       __typename: "Room",
       id: string,
+      owner: string | null,
       editors: Array< string | null >,
       messages:  {
         __typename: "ModelMessageConnection",
@@ -350,7 +361,6 @@ export type ListRoomsQuery = {
       } | null,
       createdAt: string,
       updatedAt: string,
-      owner: string | null,
     } | null > | null,
     nextToken: string | null,
   } | null,
@@ -364,11 +374,13 @@ export type GetMessageQuery = {
   getMessage:  {
     __typename: "Message",
     id: string,
+    owner: string | null,
     editors: Array< string | null >,
     roomID: string,
     room:  {
       __typename: "Room",
       id: string,
+      owner: string | null,
       editors: Array< string | null >,
       messages:  {
         __typename: "ModelMessageConnection",
@@ -376,12 +388,10 @@ export type GetMessageQuery = {
       } | null,
       createdAt: string,
       updatedAt: string,
-      owner: string | null,
     } | null,
     content: string,
     createdAt: string,
     updatedAt: string,
-    owner: string | null,
   } | null,
 };
 
@@ -397,129 +407,111 @@ export type ListMessagesQuery = {
     items:  Array< {
       __typename: "Message",
       id: string,
+      owner: string | null,
       editors: Array< string | null >,
       roomID: string,
       room:  {
         __typename: "Room",
         id: string,
+        owner: string | null,
         editors: Array< string | null >,
         createdAt: string,
         updatedAt: string,
-        owner: string | null,
       } | null,
       content: string,
       createdAt: string,
       updatedAt: string,
-      owner: string | null,
     } | null > | null,
     nextToken: string | null,
   } | null,
-};
-
-export type OnCreateRoomSubscriptionVariables = {
-  owner: string,
-  editors: string,
 };
 
 export type OnCreateRoomSubscription = {
   onCreateRoom:  {
     __typename: "Room",
     id: string,
+    owner: string | null,
     editors: Array< string | null >,
     messages:  {
       __typename: "ModelMessageConnection",
       items:  Array< {
         __typename: "Message",
         id: string,
+        owner: string | null,
         editors: Array< string | null >,
         roomID: string,
         content: string,
         createdAt: string,
         updatedAt: string,
-        owner: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
-    owner: string | null,
   } | null,
-};
-
-export type OnUpdateRoomSubscriptionVariables = {
-  owner: string,
-  editors: string,
 };
 
 export type OnUpdateRoomSubscription = {
   onUpdateRoom:  {
     __typename: "Room",
     id: string,
+    owner: string | null,
     editors: Array< string | null >,
     messages:  {
       __typename: "ModelMessageConnection",
       items:  Array< {
         __typename: "Message",
         id: string,
+        owner: string | null,
         editors: Array< string | null >,
         roomID: string,
         content: string,
         createdAt: string,
         updatedAt: string,
-        owner: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
-    owner: string | null,
   } | null,
-};
-
-export type OnDeleteRoomSubscriptionVariables = {
-  owner: string,
-  editors: string,
 };
 
 export type OnDeleteRoomSubscription = {
   onDeleteRoom:  {
     __typename: "Room",
     id: string,
+    owner: string | null,
     editors: Array< string | null >,
     messages:  {
       __typename: "ModelMessageConnection",
       items:  Array< {
         __typename: "Message",
         id: string,
+        owner: string | null,
         editors: Array< string | null >,
         roomID: string,
         content: string,
         createdAt: string,
         updatedAt: string,
-        owner: string | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
-    owner: string | null,
   } | null,
-};
-
-export type OnCreateMessageSubscriptionVariables = {
-  owner: string,
-  editors: string,
 };
 
 export type OnCreateMessageSubscription = {
   onCreateMessage:  {
     __typename: "Message",
     id: string,
+    owner: string | null,
     editors: Array< string | null >,
     roomID: string,
     room:  {
       __typename: "Room",
       id: string,
+      owner: string | null,
       editors: Array< string | null >,
       messages:  {
         __typename: "ModelMessageConnection",
@@ -527,29 +519,24 @@ export type OnCreateMessageSubscription = {
       } | null,
       createdAt: string,
       updatedAt: string,
-      owner: string | null,
     } | null,
     content: string,
     createdAt: string,
     updatedAt: string,
-    owner: string | null,
   } | null,
-};
-
-export type OnUpdateMessageSubscriptionVariables = {
-  owner: string,
-  editors: string,
 };
 
 export type OnUpdateMessageSubscription = {
   onUpdateMessage:  {
     __typename: "Message",
     id: string,
+    owner: string | null,
     editors: Array< string | null >,
     roomID: string,
     room:  {
       __typename: "Room",
       id: string,
+      owner: string | null,
       editors: Array< string | null >,
       messages:  {
         __typename: "ModelMessageConnection",
@@ -557,29 +544,24 @@ export type OnUpdateMessageSubscription = {
       } | null,
       createdAt: string,
       updatedAt: string,
-      owner: string | null,
     } | null,
     content: string,
     createdAt: string,
     updatedAt: string,
-    owner: string | null,
   } | null,
-};
-
-export type OnDeleteMessageSubscriptionVariables = {
-  owner: string,
-  editors: string,
 };
 
 export type OnDeleteMessageSubscription = {
   onDeleteMessage:  {
     __typename: "Message",
     id: string,
+    owner: string | null,
     editors: Array< string | null >,
     roomID: string,
     room:  {
       __typename: "Room",
       id: string,
+      owner: string | null,
       editors: Array< string | null >,
       messages:  {
         __typename: "ModelMessageConnection",
@@ -587,11 +569,9 @@ export type OnDeleteMessageSubscription = {
       } | null,
       createdAt: string,
       updatedAt: string,
-      owner: string | null,
     } | null,
     content: string,
     createdAt: string,
     updatedAt: string,
-    owner: string | null,
   } | null,
 };

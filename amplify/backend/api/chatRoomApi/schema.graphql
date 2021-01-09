@@ -1,18 +1,36 @@
-type Room @model
-  @auth(rules: [{allow: owner, identityClaim: "sub"}, {allow: owner, ownerField: "editors", operations: [read, create, update, delete]}])
-{
+type Room @model {
   id: ID!
+  owner: String
   editors: [String]!
   messages: [Message] @connection(keyName: "byRoom", fields: ["id"])
 }
 
-type Message @model
-  @key(name: "byRoom", fields: ["roomID"])
-  @auth(rules: [{allow: owner, identityClaim: "sub"}, {allow: owner, ownerField: "editors", operations: [read, create, update, delete]}])
-{
+type Message @model @key(name: "byRoom", fields: ["roomID"]) {
   id: ID!
+  owner: String
   editors: [String]!
   roomID: ID!
   room: Room @connection(fields: ["roomID"])
   content: String!
 }
+
+# type Room @model
+#   @auth(rules: [{allow: owner, identityClaim: "sub"}, {allow: owner, ownerField: "editors", operations: [read, create, update, delete]}])
+# {
+#   id: ID!
+#   owner: String
+#   editors: [String]!
+#   messages: [Message] @connection(keyName: "byRoom", fields: ["id"])
+# }
+
+# type Message @model
+#   @key(name: "byRoom", fields: ["roomID"])
+#   @auth(rules: [{allow: owner, identityClaim: "sub"}, {allow: owner, ownerField: "editors", operations: [read, create, update, delete]}])
+# {
+#   id: ID!
+#   owner: String
+#   editors: [String]!
+#   roomID: ID!
+#   room: Room @connection(fields: ["roomID"])
+#   content: String!
+# }

@@ -9,22 +9,22 @@ export const createRoom = /* GraphQL */ `
   ) {
     createRoom(input: $input, condition: $condition) {
       id
+      owner
       editors
       messages {
         items {
           id
+          owner
           editors
           roomID
           content
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -35,22 +35,22 @@ export const updateRoom = /* GraphQL */ `
   ) {
     updateRoom(input: $input, condition: $condition) {
       id
+      owner
       editors
       messages {
         items {
           id
+          owner
           editors
           roomID
           content
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -61,22 +61,22 @@ export const deleteRoom = /* GraphQL */ `
   ) {
     deleteRoom(input: $input, condition: $condition) {
       id
+      owner
       editors
       messages {
         items {
           id
+          owner
           editors
           roomID
           content
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -87,22 +87,22 @@ export const createMessage = /* GraphQL */ `
   ) {
     createMessage(input: $input, condition: $condition) {
       id
+      owner
       editors
       roomID
       room {
         id
+        owner
         editors
         messages {
           nextToken
         }
         createdAt
         updatedAt
-        owner
       }
       content
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -113,22 +113,22 @@ export const updateMessage = /* GraphQL */ `
   ) {
     updateMessage(input: $input, condition: $condition) {
       id
+      owner
       editors
       roomID
       room {
         id
+        owner
         editors
         messages {
           nextToken
         }
         createdAt
         updatedAt
-        owner
       }
       content
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -139,22 +139,22 @@ export const deleteMessage = /* GraphQL */ `
   ) {
     deleteMessage(input: $input, condition: $condition) {
       id
+      owner
       editors
       roomID
       room {
         id
+        owner
         editors
         messages {
           nextToken
         }
         createdAt
         updatedAt
-        owner
       }
       content
       createdAt
       updatedAt
-      owner
     }
   }
 `;

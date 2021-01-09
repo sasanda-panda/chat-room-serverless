@@ -6,22 +6,22 @@ export const getRoom = /* GraphQL */ `
   query GetRoom($id: ID!) {
     getRoom(id: $id) {
       id
+      owner
       editors
       messages {
         items {
           id
+          owner
           editors
           roomID
           content
           createdAt
           updatedAt
-          owner
         }
         nextToken
       }
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -34,32 +34,32 @@ export const listRooms = /* GraphQL */ `
     listRooms(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        owner
         editors
         messages {
           items {
             id
+            owner
             editors
             roomID
             room {
               id
+              owner
               editors
               messages {
                 nextToken
               }
               createdAt
               updatedAt
-              owner
             }
             content
             createdAt
             updatedAt
-            owner
           }
           nextToken
         }
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }
@@ -69,22 +69,22 @@ export const getMessage = /* GraphQL */ `
   query GetMessage($id: ID!) {
     getMessage(id: $id) {
       id
+      owner
       editors
       roomID
       room {
         id
+        owner
         editors
         messages {
           nextToken
         }
         createdAt
         updatedAt
-        owner
       }
       content
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -97,19 +97,19 @@ export const listMessages = /* GraphQL */ `
     listMessages(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        owner
         editors
         roomID
         room {
           id
+          owner
           editors
           createdAt
           updatedAt
-          owner
         }
         content
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }
