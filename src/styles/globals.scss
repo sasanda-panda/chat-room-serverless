@@ -1,3 +1,5 @@
+@import './includes/_variables.scss';
+
 /* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
    License: none (public domain)
@@ -92,4 +94,22 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+.navigation {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 2;
+  &_list {
+    display: flex;
+    &_item {
+      color: $COLOR_DARK_BLUE;
+      font-size: 24px;
+      cursor: pointer;
+      & + & {
+        margin: 0 0 0 16px;
+      }
+    }
+  }
 }

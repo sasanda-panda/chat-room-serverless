@@ -13,7 +13,7 @@ import { listRooms } from '../graphql/queries'
 import { createRoom, deleteRoom, createMessage, deleteMessage } from '../graphql/mutations'
 import { onCreateRoom, onDeleteRoom, onCreateMessage, onDeleteMessage } from '../graphql/subscriptions'
 import styles from '../styles/Home.module.scss'
-import { create } from 'domain'
+import { AiOutlineSend } from 'react-icons/ai'
 
 const awsconfig = {
   apiVersion: '2016-04-18',
@@ -163,7 +163,17 @@ const Home: NextPage = () => {
               newRooms.forEach((room, index) => {
                 if (room.id === result.value.data.onCreateMessage.roomID) newIndex = index
               })
-              newRooms[newIndex].messages.items.push(result.value.data.onCreateMessage)
+              newRooms[newIndex] = {
+                ...newRooms[newIndex],
+                messages: {
+                  ...newRooms[newIndex].messages,
+                  items: [
+                    ...newRooms[newIndex].messages.items,
+                    result.value.data.onCreateMessage
+                  ]
+                }
+              }
+              setCurrentRoom(newRooms[newIndex])
               return newRooms
             }
             setRooms((oldRooms) => updateArray(oldRooms))
@@ -179,10 +189,6 @@ const Home: NextPage = () => {
     fetchData()
     attachSubscriptions()
   }, [])
-
-  useEffect(() => {
-    console.log(rooms)
-  }, [rooms])
 
   // 
 
@@ -272,7 +278,7 @@ const Home: NextPage = () => {
           {currentRoom ? (
             <>
               <ul className={styles.messages}>
-                {currentRoom.messages?.items?.map((message) => (
+                {currentRoom.messages.items?.map((message) => (
                   <li key={message.id} className={`${styles.messages_item} ${checkMessageIsOwener(message) ? styles.messages_item_right : styles.messages_item_left }`}>
                     <p className={styles.messages_item_content}>{message.content.split('\n').map((s) => (<span key={s}>{s}<br /></span>))}</p>
                   </li>
@@ -280,7 +286,7 @@ const Home: NextPage = () => {
               </ul>
               <div className={styles.chat}>
                 <textarea className={styles.chat_text} placeholder="Enter your message" value={sendMessageContent} onChange={(eve) => setSendMessageContent(eve.target.value)}></textarea>
-                <button className={styles.chat_button} onClick={() => onClickChatButton(currentRoom)}></button>
+                <button className={styles.chat_button} onClick={() => onClickChatButton(currentRoom)}><span><AiOutlineSend /></span></button>
               </div>
             </>
           ) : (
