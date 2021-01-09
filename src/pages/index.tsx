@@ -1,11 +1,7 @@
 // MEMO: https://github.com/aws-amplify/amplify-js/issues/1324
 
-
-// 
-
-// TODO: list
-// TODO: subscription
-// TODO: SPスタイル
+// TODO: Profileのスタイリング
+// TODO: ユーザー削除
 
 import AWS from 'aws-sdk'
 import API, { graphqlOperation } from '@aws-amplify/api'

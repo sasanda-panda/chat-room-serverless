@@ -112,7 +112,7 @@ const Profile: NextPage = () => {
         </dl>
       </div>
       <div className={styles.profile_body}>
-        <button onClick={() => signOut()}>signOut</button>
+        <button onClick={() => signOut()}>Sign out</button>
       </div>
     </div>
   ) : (
@@ -123,15 +123,9 @@ const Profile: NextPage = () => {
             return (
               <>
                 <div className={styles.profile_head}>
-                  <div>
-                    <input type="text" placeholder="Username" value={username} onChange={(eve) => setUsername(eve.target.value)} />
-                  </div>
-                  <div>
-                    <input type="text" placeholder="Email" value={email} onChange={(eve) => setEmail(eve.target.value)} />
-                  </div>
-                  <div>
-                    <input type="password" placeholder="Password" value={password} onChange={(eve) => setPassword(eve.target.value)} />
-                  </div>
+                  <input type="text" placeholder="Username" value={username} onChange={(eve) => setUsername(eve.target.value)} />
+                  <input type="text" placeholder="Email" value={email} onChange={(eve) => setEmail(eve.target.value)} />
+                  <input type="password" placeholder="Password" value={password} onChange={(eve) => setPassword(eve.target.value)} />
                 </div>
                 <div className={styles.profile_body}>
                   <button onClick={() => signUp()}>Sign up</button>
@@ -143,15 +137,11 @@ const Profile: NextPage = () => {
             return (
               <>
                 <div className={styles.profile_head}>
-                  <div>
-                    <input type="text" placeholder="Username" value={username} onChange={(eve) => setUsername(eve.target.value)} />
-                  </div>
-                  <div>
-                    <input type="text" placeholder="Code" value={code} onChange={(eve) => setCode(eve.target.value)} />
-                  </div>
+                  <input type="text" placeholder="Username" value={username} onChange={(eve) => setUsername(eve.target.value)} />
+                  <input type="text" placeholder="Code" value={code} onChange={(eve) => setCode(eve.target.value)} />
                 </div>
                 <div className={styles.profile_body}>
-                  <button onClick={() => confirmSignUp()}>Confirm Sign up</button>
+                  <button onClick={() => confirmSignUp()}>Confirm sign up</button>
                   <button onClick={() => resendSignUp()}>Resend sign up</button>
                 </div>
               </>
@@ -160,12 +150,8 @@ const Profile: NextPage = () => {
             return (
               <>
                 <div className={styles.profile_head}>
-                  <div>
-                    <input type="text" placeholder="Username" value={username} onChange={(eve) => setUsername(eve.target.value)} />
-                  </div>
-                  <div>
-                    <input type="password" placeholder="Password" value={password} onChange={(eve) => setPassword(eve.target.value)} />
-                  </div>
+                  <input type="text" placeholder="Username" value={username} onChange={(eve) => setUsername(eve.target.value)} />
+                  <input type="password" placeholder="Password" value={password} onChange={(eve) => setPassword(eve.target.value)} />
                 </div>
                 <div className={styles.profile_body}>
                   <button onClick={() => signIn()}>Sign in</button>
