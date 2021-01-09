@@ -193,9 +193,27 @@ const Home: NextPage = () => {
     setSearchUserTerm(value)
   }
 
-  const onClickResultsItem = async () => {
-    // 履歴があればsetCurrentRoom
-    // なければ作成
+  const onClickResultsItem = async (friendUser: UserType) => {
+    const allFriendUsers = rooms?.map((room) => ({
+      room: room,
+      sub: room.editors.filter((editor) => editor !== authenticatedUser.sub)[0]
+    }))
+    try {
+      if (allFriendUsers?.map((user) => user.sub).indexOf(friendUser.sub) > -1) {
+        setCurrentRoom(allFriendUsers?.filter((user) => user.sub === friendUser.sub)[0].room)
+        setSearchUserTerm('')
+      } else {
+        const withData = { input: {
+          id: Date.now(),
+          editors: [authenticatedUser.sub, friendUser.sub]
+        } }
+        const data: any = await API.graphql(graphqlOperation(createRoom, withData))
+        setCurrentRoom(data.data.createRoom)
+        setSearchUserTerm('')
+      }
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   const onClickFriendsItem = (room: RoomType) => {
@@ -213,7 +231,7 @@ const Home: NextPage = () => {
             {searchUserTerm !== '' && (
               <ul className={styles.search_results}>
                 {filterdAllUsers?.map((user) => (
-                  <li key={user.username} className={styles.search_results_item} onClick={() => createRoomAsync(user)}>
+                  <li key={user.username} className={styles.search_results_item} onClick={() => onClickResultsItem(user)}>
                     {user.username}<span>{user.email}</span>
                   </li>
                 ))}
@@ -262,7 +280,7 @@ const Home: NextPage = () => {
                 </div>
               </>
             ) : (
-              <div>チャットを始めよう</div>
+              <div></div>
             )
           )}
         </div>
